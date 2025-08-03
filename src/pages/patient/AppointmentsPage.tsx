@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Calendar, Clock, Video, MapPin, Plus, Filter, Search, X } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
@@ -7,6 +8,26 @@ const AppointmentsPage = () => {
   const [filter, setFilter] = useState('upcoming');
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const location = useLocation();
+
+  // Check for openModal parameter in URL
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.get('openModal') === 'true') {
+      setIsModalOpen(true);
+    }
+  }, [location]);
+
+  // Form data for appointment request
+  const [appointmentForm, setAppointmentForm] = useState({
+    specialty: '',
+    doctor: '',
+    date: '',
+    time: '',
+    type: 'presencial',
+    reason: ''
+  });
 
   // Mock appointments data
   const appointments = [
@@ -44,6 +65,50 @@ const AppointmentsPage = () => {
       notes: 'Consulta inicial',
     },
   ];
+
+  // Check URL parameters to auto-open modal
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.get('openModal') === 'true') {
+      setIsModalOpen(true);
+      // Clean up URL without causing a re-render
+      window.history.replaceState({}, '', '/patient/appointments');
+    }
+  }, [location]);
+
+  // Handle form submission
+  const handleAppointmentSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Here you would normally send the data to your backend
+      console.log('Appointment request submitted:', appointmentForm);
+
+      // Reset form and close modal
+      setAppointmentForm({
+        specialty: '',
+        doctor: '',
+        date: '',
+        time: '',
+        type: 'presencial',
+        reason: ''
+      });
+      setIsModalOpen(false);
+
+      // You could show a success message here
+      alert('Solicitud de cita enviada exitosamente. Te contactaremos pronto para confirmar.');
+
+    } catch (error) {
+      console.error('Error submitting appointment:', error);
+      alert('Error al enviar la solicitud. Por favor, inténtalo de nuevo.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const filteredAppointments = appointments.filter(appointment => {
     const matchesFilter = filter === 'all' || 
@@ -224,15 +289,21 @@ const AppointmentsPage = () => {
               </button>
             </div>
 
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleAppointmentSubmit}>
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Especialidad
                 </label>
-                <select className="block w-full rounded-md border-neutral-300 text-sm focus:border-primary-500 focus:ring-primary-500">
-                  <option>Ginecología</option>
-                  <option>Obstetricia</option>
-                  <option>Medicina Reproductiva</option>
+                <select
+                  className="block w-full rounded-md border-neutral-300 text-sm focus:border-primary-500 focus:ring-primary-500"
+                  value={appointmentForm.specialty}
+                  onChange={(e) => setAppointmentForm(prev => ({ ...prev, specialty: e.target.value }))}
+                  required
+                >
+                  <option value="">Selecciona una especialidad</option>
+                  <option value="ginecologia">Ginecología</option>
+                  <option value="obstetricia">Obstetricia</option>
+                  <option value="medicina-reproductiva">Medicina Reproductiva</option>
                 </select>
               </div>
 
@@ -240,10 +311,16 @@ const AppointmentsPage = () => {
                 <label className="block text-sm font-medium text-neutral-700 mb-1">
                   Doctor Preferido
                 </label>
-                <select className="block w-full rounded-md border-neutral-300 text-sm focus:border-primary-500 focus:ring-primary-500">
-                  <option>Dra. Ana Méndez</option>
-                  <option>Dra. Carmen López</option>
-                  <option>Dr. Luis Rodríguez</option>
+                <select
+                  className="block w-full rounded-md border-neutral-300 text-sm focus:border-primary-500 focus:ring-primary-500"
+                  value={appointmentForm.doctor}
+                  onChange={(e) => setAppointmentForm(prev => ({ ...prev, doctor: e.target.value }))}
+                  required
+                >
+                  <option value="">Selecciona un doctor</option>
+                  <option value="ana-mendez">Dra. Ana Méndez</option>
+                  <option value="carmen-lopez">Dra. Carmen López</option>
+                  <option value="luis-rodriguez">Dr. Luis Rodríguez</option>
                 </select>
               </div>
 
@@ -254,18 +331,65 @@ const AppointmentsPage = () => {
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
-                    className="flex items-center justify-center rounded-md border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                    onClick={() => setAppointmentForm(prev => ({ ...prev, type: 'presencial' }))}
+                    className={`flex items-center justify-center rounded-md border px-3 py-2 text-sm font-medium ${
+                      appointmentForm.type === 'presencial'
+                        ? 'border-primary-500 bg-primary-50 text-primary-700'
+                        : 'border-neutral-300 text-neutral-700 hover:bg-neutral-50'
+                    }`}
                   >
                     <MapPin size={14} className="mr-2" />
                     Presencial
                   </button>
                   <button
                     type="button"
-                    className="flex items-center justify-center rounded-md border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                    onClick={() => setAppointmentForm(prev => ({ ...prev, type: 'virtual' }))}
+                    className={`flex items-center justify-center rounded-md border px-3 py-2 text-sm font-medium ${
+                      appointmentForm.type === 'virtual'
+                        ? 'border-primary-500 bg-primary-50 text-primary-700'
+                        : 'border-neutral-300 text-neutral-700 hover:bg-neutral-50'
+                    }`}
                   >
                     <Video size={14} className="mr-2" />
                     Virtual
                   </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">
+                    Fecha Preferida
+                  </label>
+                  <input
+                    type="date"
+                    className="block w-full rounded-md border-neutral-300 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    value={appointmentForm.date}
+                    onChange={(e) => setAppointmentForm(prev => ({ ...prev, date: e.target.value }))}
+                    min={new Date().toISOString().split('T')[0]}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">
+                    Hora Preferida
+                  </label>
+                  <select
+                    className="block w-full rounded-md border-neutral-300 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    value={appointmentForm.time}
+                    onChange={(e) => setAppointmentForm(prev => ({ ...prev, time: e.target.value }))}
+                    required
+                  >
+                    <option value="">Selecciona una hora</option>
+                    <option value="08:00">08:00 AM</option>
+                    <option value="09:00">09:00 AM</option>
+                    <option value="10:00">10:00 AM</option>
+                    <option value="11:00">11:00 AM</option>
+                    <option value="14:00">02:00 PM</option>
+                    <option value="15:00">03:00 PM</option>
+                    <option value="16:00">04:00 PM</option>
+                    <option value="17:00">05:00 PM</option>
+                  </select>
                 </div>
               </div>
 
@@ -277,6 +401,9 @@ const AppointmentsPage = () => {
                   rows={3}
                   className="block w-full rounded-md border-neutral-300 text-sm focus:border-primary-500 focus:ring-primary-500"
                   placeholder="Describe brevemente el motivo de tu consulta..."
+                  value={appointmentForm.reason}
+                  onChange={(e) => setAppointmentForm(prev => ({ ...prev, reason: e.target.value }))}
+                  required
                 />
               </div>
 
@@ -294,8 +421,10 @@ const AppointmentsPage = () => {
                   type="submit"
                   className="w-full sm:w-auto"
                   size="sm"
+                  isLoading={isSubmitting}
+                  disabled={isSubmitting}
                 >
-                  Enviar Solicitud
+                  {isSubmitting ? 'Enviando...' : 'Enviar Solicitud'}
                 </Button>
               </div>
             </form>

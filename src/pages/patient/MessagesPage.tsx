@@ -42,37 +42,72 @@ const MessagesPage = () => {
     },
   ];
 
-  // Mock messages for the selected conversation
-  const messages = [
-    {
-      id: 1,
-      sender: 'patient',
-      text: 'Doctora, tengo una pregunta sobre el tratamiento',
-      timestamp: '2024-03-19T14:25:00',
-      status: 'read',
-    },
-    {
-      id: 2,
-      sender: 'doctor',
-      text: 'Claro, dime en qué puedo ayudarte',
-      timestamp: '2024-03-19T14:26:00',
-      status: 'read',
-    },
-    {
-      id: 3,
-      sender: 'patient',
-      text: '¿Es normal sentir un poco de náuseas con el hierro?',
-      timestamp: '2024-03-19T14:27:00',
-      status: 'read',
-    },
-    {
-      id: 4,
-      sender: 'doctor',
-      text: 'Sí, es completamente normal. Te recomiendo tomarlo con alimentos para reducir las náuseas. Los resultados se ven bien, continuemos con el tratamiento',
-      timestamp: '2024-03-19T14:30:00',
-      status: 'read',
-    },
-  ];
+  // Mock messages for each conversation
+  const messagesByConversation: { [key: number]: any[] } = {
+    1: [
+      {
+        id: 1,
+        sender: 'patient',
+        text: 'Doctora, tengo una pregunta sobre el tratamiento',
+        timestamp: '2024-03-19T14:25:00',
+        status: 'read',
+      },
+      {
+        id: 2,
+        sender: 'doctor',
+        text: 'Claro, dime en qué puedo ayudarte',
+        timestamp: '2024-03-19T14:26:00',
+        status: 'read',
+      },
+      {
+        id: 3,
+        sender: 'patient',
+        text: '¿Es normal sentir un poco de náuseas con el hierro?',
+        timestamp: '2024-03-19T14:27:00',
+        status: 'read',
+      },
+      {
+        id: 4,
+        sender: 'doctor',
+        text: 'Sí, es completamente normal. Te recomiendo tomarlo con alimentos para reducir las náuseas. Los resultados se ven bien, continuemos con el tratamiento',
+        timestamp: '2024-03-19T14:30:00',
+        status: 'read',
+      },
+    ],
+    2: [
+      {
+        id: 1,
+        sender: 'patient',
+        text: 'Doctora Carmen, ¿cuándo podríamos programar la siguiente consulta?',
+        timestamp: '2024-03-20T09:15:00',
+        status: 'read',
+      },
+      {
+        id: 2,
+        sender: 'doctor',
+        text: 'Hola! Tengo disponibilidad la próxima semana. ¿Te parece bien el martes a las 2:00 PM?',
+        timestamp: '2024-03-20T09:30:00',
+        status: 'read',
+      },
+      {
+        id: 3,
+        sender: 'patient',
+        text: 'Perfecto, me viene muy bien ese horario. ¿Necesito llevar algún estudio específico?',
+        timestamp: '2024-03-20T09:35:00',
+        status: 'read',
+      },
+      {
+        id: 4,
+        sender: 'doctor',
+        text: 'Sí, por favor trae los resultados del ultrasonido que te solicité la vez pasada.',
+        timestamp: '2024-03-20T10:00:00',
+        status: 'delivered',
+      },
+    ]
+  };
+
+  // Get messages for the selected conversation
+  const messages = selectedChat ? messagesByConversation[selectedChat] || [] : [];
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();

@@ -6,6 +6,7 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DoctorDashboard from './pages/doctor/DoctorDashboard';
+import DoctorPatientsPage from './pages/doctor/DoctorPatientsPage';
 import AppointmentsPage from './pages/doctor/AppointmentsPage';
 import TreatmentsPage from './pages/doctor/TreatmentsPage';
 import MessagesPage from './pages/doctor/MessagesPage';
@@ -15,6 +16,7 @@ import PatientAppointmentsPage from './pages/patient/AppointmentsPage';
 import PatientTreatmentsPage from './pages/patient/TreatmentsPage';
 import PatientMessagesPage from './pages/patient/MessagesPage';
 import ProfilePage from './pages/patient/ProfilePage';
+import PatientSettingsPage from './pages/patient/SettingsPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 // Layouts
@@ -30,7 +32,7 @@ const ProtectedRoute = ({ children, requiredRole }: { children: React.ReactNode,
   }
   
   if (requiredRole && user?.role !== requiredRole) {
-    return <Navigate to="/\" replace />;
+    return <Navigate to="/" replace />;
   }
   
   return <>{children}</>;
@@ -51,11 +53,12 @@ function App() {
         </ProtectedRoute>
       }>
         <Route index element={<DoctorDashboard />} />
+        <Route path="patients" element={<DoctorPatientsPage />} />
         <Route path="appointments" element={<AppointmentsPage />} />
         <Route path="treatments" element={<TreatmentsPage />} />
         <Route path="messages" element={<MessagesPage />} />
         <Route path="reports" element={<ReportsPage />} />
-        <Route path="settings" element={<div>Settings</div>} />
+        <Route path="settings" element={<div className="p-6"><h1 className="text-2xl font-bold mb-4">Configuración del Doctor</h1><p className="text-neutral-600">Página de configuración en desarrollo.</p></div>} />
       </Route>
       
       {/* Patient routes */}
@@ -69,6 +72,7 @@ function App() {
         <Route path="treatments" element={<PatientTreatmentsPage />} />
         <Route path="messages" element={<PatientMessagesPage />} />
         <Route path="profile" element={<ProfilePage />} />
+        <Route path="settings" element={<PatientSettingsPage />} />
       </Route>
       
       {/* Catch all route */}

@@ -28,6 +28,18 @@ const TreatmentsPage = () => {
     // Add more mock treatments...
   ];
 
+  // Handle form submission
+  const handleTreatmentSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Here you would normally send the data to your backend
+    console.log('Treatment submitted');
+
+    // Close modal and show success message
+    setIsModalOpen(false);
+    alert('Tratamiento guardado exitosamente');
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between space-y-4 md:flex-row md:items-center md:space-y-0">
@@ -187,7 +199,7 @@ const TreatmentsPage = () => {
               </button>
             </div>
 
-            <form className="space-y-4">
+            <form onSubmit={handleTreatmentSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-neutral-700">
                   Paciente

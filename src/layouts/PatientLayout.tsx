@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { 
-  Calendar, MessageSquare, User, Activity, Menu, X, Pill
+import {
+  Calendar, MessageSquare, User, Activity, Menu, X, Pill, Settings
 } from 'lucide-react';
 
 const PatientLayout = () => {
@@ -106,17 +106,27 @@ const PatientLayout = () => {
                 <User size={20} className="mr-3 text-neutral-400" />
                 <span className="text-sm lg:text-base">Mi Perfil</span>
               </Link>
+              <Link
+                to="/patient/settings"
+                className="flex items-center rounded-md px-3 py-3 lg:py-2 text-neutral-700 hover:bg-primary-50 hover:text-primary-600 transition-colors"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <Settings size={20} className="mr-3 text-neutral-400" />
+                <span className="text-sm lg:text-base">Configuración</span>
+              </Link>
             </nav>
           </div>
         </aside>
         
-        {/* Mobile sidebar toggle button */}
-        <button
-          onClick={toggleSidebar}
-          className="fixed bottom-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary-500 text-white shadow-lg hover:bg-primary-600 lg:hidden"
-        >
-          <Menu size={24} />
-        </button>
+        {/* Mobile sidebar toggle button - only show when sidebar is closed */}
+        {!sidebarOpen && (
+          <button
+            onClick={toggleSidebar}
+            className="fixed bottom-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary-500 text-white shadow-lg hover:bg-primary-600 lg:hidden"
+          >
+            <Menu size={24} />
+          </button>
+        )}
         
         {/* Main content */}
         <main className="flex-1 overflow-auto bg-neutral-50 p-3 sm:p-4 lg:p-6">

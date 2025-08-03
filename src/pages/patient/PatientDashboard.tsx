@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Calendar, Activity, FileText, MessageSquare, Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import { Line, Doughnut } from 'react-chartjs-2';
@@ -90,6 +91,36 @@ const mockSymptomsData = {
 
 const PatientDashboard = () => {
   const [period, setPeriod] = useState<'3months' | '6months'>('6months');
+  const navigate = useNavigate();
+
+  // Navigation handlers
+  const handleSolicitarCita = () => {
+    navigate('/patient/appointments?openModal=true');
+  };
+
+  const handleAgendarCita = () => {
+    navigate('/patient/appointments?openModal=true');
+  };
+
+  const handleRegistrarCiclo = () => {
+    navigate('/patient/treatments');
+  };
+
+  const handleEnviarMensaje = () => {
+    navigate('/patient/messages');
+  };
+
+  const handleVerResultados = () => {
+    navigate('/patient/treatments');
+  };
+
+  const handleVerTodosTratamientos = () => {
+    navigate('/patient/treatments');
+  };
+
+  const handleRegistrarSintoma = () => {
+    alert('Funcionalidad de registro de síntomas - En desarrollo');
+  };
   
   return (
     <div className="space-y-6">
@@ -99,7 +130,7 @@ const PatientDashboard = () => {
           <p className="text-neutral-600">Bienvenida de vuelta, aquí está el resumen de tu salud</p>
         </div>
         <div>
-          <Button variant="primary" className="inline-flex items-center">
+          <Button variant="primary" className="inline-flex items-center" onClick={handleSolicitarCita}>
             <Plus size={16} className="mr-2" />
             Solicitar Cita
           </Button>
@@ -165,19 +196,19 @@ const PatientDashboard = () => {
         <Card>
           <h2 className="mb-4 font-heading text-lg font-semibold text-neutral-900">Acciones Rápidas</h2>
           <div className="space-y-3">
-            <button className="flex w-full items-center rounded-md bg-primary-50 p-3 text-primary-700 transition hover:bg-primary-100">
+            <button onClick={handleAgendarCita} className="flex w-full items-center rounded-md bg-primary-50 p-3 text-primary-700 transition hover:bg-primary-100">
               <Calendar size={20} className="mr-3" />
               <span className="text-sm font-medium">Agendar Cita</span>
             </button>
-            <button className="flex w-full items-center rounded-md bg-secondary-50 p-3 text-secondary-700 transition hover:bg-secondary-100">
+            <button onClick={handleRegistrarCiclo} className="flex w-full items-center rounded-md bg-secondary-50 p-3 text-secondary-700 transition hover:bg-secondary-100">
               <Activity size={20} className="mr-3" />
               <span className="text-sm font-medium">Registrar Ciclo</span>
             </button>
-            <button className="flex w-full items-center rounded-md bg-accent-50 p-3 text-accent-700 transition hover:bg-accent-100">
+            <button onClick={handleEnviarMensaje} className="flex w-full items-center rounded-md bg-accent-50 p-3 text-accent-700 transition hover:bg-accent-100">
               <MessageSquare size={20} className="mr-3" />
               <span className="text-sm font-medium">Enviar Mensaje</span>
             </button>
-            <button className="flex w-full items-center rounded-md bg-neutral-100 p-3 text-neutral-700 transition hover:bg-neutral-200">
+            <button onClick={handleVerResultados} className="flex w-full items-center rounded-md bg-neutral-100 p-3 text-neutral-700 transition hover:bg-neutral-200">
               <FileText size={20} className="mr-3" />
               <span className="text-sm font-medium">Ver Resultados</span>
             </button>
@@ -239,7 +270,7 @@ const PatientDashboard = () => {
         <Card>
           <div className="mb-4 flex items-center justify-between">
             <h2 className="font-heading text-lg font-semibold text-neutral-900">Síntomas Registrados</h2>
-            <button className="text-sm font-medium text-primary-600 hover:text-primary-700">
+            <button onClick={handleRegistrarSintoma} className="text-sm font-medium text-primary-600 hover:text-primary-700">
               Registrar Nuevo
             </button>
           </div>
@@ -267,7 +298,7 @@ const PatientDashboard = () => {
       <Card>
         <div className="mb-4 flex items-center justify-between">
           <h2 className="font-heading text-lg font-semibold text-neutral-900">Tratamientos Activos</h2>
-          <button className="text-sm font-medium text-primary-600 hover:text-primary-700">
+          <button onClick={handleVerTodosTratamientos} className="text-sm font-medium text-primary-600 hover:text-primary-700">
             Ver Todos
           </button>
         </div>

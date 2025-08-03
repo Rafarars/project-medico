@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pill, Clock, CheckCircle, AlertCircle, Calendar, Plus, X } from 'lucide-react';
+import { Pill, Clock, CheckCircle, AlertCircle, Calendar, Plus, X, Play } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
 
@@ -7,8 +7,8 @@ const TreatmentsPage = () => {
   const [filter, setFilter] = useState('active');
   const [selectedTreatment, setSelectedTreatment] = useState<number | null>(null);
 
-  // Mock treatments data
-  const treatments = [
+  // Mock treatments data with state
+  const [treatments, setTreatments] = useState([
     {
       id: 1,
       medication: 'Ácido Fólico',
@@ -20,7 +20,7 @@ const TreatmentsPage = () => {
       adherence: 85,
       instructions: 'Tomar con el desayuno, preferiblemente con jugo de naranja',
       doctor: 'Dra. Ana Méndez',
-      nextDose: '2024-03-20T08:00:00',
+      nextDose: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 16) + ':00',
       totalDoses: 90,
       takenDoses: 76,
     },
@@ -35,7 +35,7 @@ const TreatmentsPage = () => {
       adherence: 92,
       instructions: 'Tomar con el almuerzo, evitar lácteos',
       doctor: 'Dra. Ana Méndez',
-      nextDose: '2024-03-20T12:00:00',
+      nextDose: new Date(Date.now() + 12 * 60 * 60 * 1000).toISOString().slice(0, 16) + ':00',
       totalDoses: 60,
       takenDoses: 55,
     },
@@ -53,10 +53,14 @@ const TreatmentsPage = () => {
       totalDoses: 42,
       takenDoses: 41,
     },
-  ];
+  ]);
 
   const filteredTreatments = treatments.filter(treatment => {
     if (filter === 'all') return true;
+    if (filter === 'active') {
+      // Show both active and paused treatments in the "active" view
+      return treatment.status === 'active' || treatment.status === 'paused';
+    }
     return treatment.status === filter;
   });
 
@@ -87,8 +91,79 @@ const TreatmentsPage = () => {
   };
 
   const markAsTaken = (treatmentId: number) => {
-    // Here you would update the treatment status
-    console.log('Marking treatment as taken:', treatmentId);
+    setTreatments(prevTreatments =>
+      prevTreatments.map(treatment => {
+        if (treatment.id === treatmentId && treatment.status === 'active') {
+          const newTakenDoses = Math.min(treatment.takenDoses + 1, treatment.totalDoses);
+          const newAdherence = Math.round((newTakenDoses / treatment.totalDoses) * 100);
+
+          // Check if treatment is completed
+          const newStatus = newTakenDoses === treatment.totalDoses ? 'completed' : 'active';
+
+          return {
+            ...treatment,
+            takenDoses: newTakenDoses,
+            adherence: newAdherence,
+            status: newStatus
+          };
+        }
+        return treatment;
+      })
+    );
+
+    // Show success message using updated state
+    setTreatments(prevTreatments => {
+      const treatment = prevTreatments.find(t => t.id === treatmentId);
+      if (treatment) {
+        const newTakenDoses = Math.min(treatment.takenDoses + 1, treatment.totalDoses);
+        if (newTakenDoses === treatment.totalDoses) {
+          setTimeout(() => alert(`¡Felicidades! Has completado el tratamiento de ${treatment.medication}`), 100);
+        } else {
+          setTimeout(() => alert(`Dosis de ${treatment.medication} marcada como tomada`), 100);
+        }
+      }
+      return prevTreatments;
+    });
+  };
+
+  const pauseTreatment = (treatmentId: number) => {
+    setTreatments(prevTreatments =>
+      prevTreatments.map(treatment => {
+        if (treatment.id === treatmentId && treatment.status === 'active') {
+          return {
+            ...treatment,
+            status: 'paused'
+          };
+        }
+        return treatment;
+      })
+    );
+
+    const treatment = treatments.find(t => t.id === treatmentId);
+    if (treatment) {
+      alert(`Tratamiento de ${treatment.medication} pausado`);
+    }
+    setSelectedTreatment(null);
+  };
+
+  const resumeTreatment = (treatmentId: number) => {
+    setTreatments(prevTreatments =>
+      prevTreatments.map(treatment => {
+        if (treatment.id === treatmentId && treatment.status === 'paused') {
+          return {
+            ...treatment,
+            status: 'active'
+          };
+        }
+        return treatment;
+      })
+    );
+
+    const treatment = treatments.find(t => t.id === treatmentId);
+    if (treatment) {
+      alert(`Tratamiento de ${treatment.medication} reanudado`);
+    }
+    setSelectedTreatment(null);
   };
 
   return (
@@ -118,7 +193,7 @@ const TreatmentsPage = () => {
           <h2 className="mb-4 font-heading text-base lg:text-lg font-semibold text-neutral-900">Medicamentos de Hoy</h2>
           <div className="space-y-3">
             {treatments
-              .filter(t => t.status === 'active')
+              .filter(t => t.status === 'active' || t.status === 'paused')
               .map((treatment) => (
                 <div key={treatment.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg border border-neutral-200 bg-neutral-50 p-3 lg:p-4 space-y-3 sm:space-y-0">
                   <div className="flex items-start space-x-3">
@@ -126,22 +201,47 @@ const TreatmentsPage = () => {
                       <Pill size={18} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-neutral-900 text-sm lg:text-base">{treatment.medication}</h3>
+                      <h3 className="font-medium text-neutral-900 text-sm lg:text-base">
+                        {treatment.medication}
+                        {treatment.status === 'paused' && (
+                          <span className="ml-2 inline-flex rounded-full bg-warning-100 px-2 py-0.5 text-xs font-medium text-warning-700">
+                            Pausado
+                          </span>
+                        )}
+                      </h3>
                       <p className="text-xs lg:text-sm text-neutral-600 break-words">{treatment.dosage} - {treatment.instructions}</p>
-                      <p className="text-xs text-neutral-500">
-                        Próxima dosis: {new Date(treatment.nextDose).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </p>
+                      {treatment.status === 'active' ? (
+                        <p className="text-xs text-neutral-500">
+                          Próxima dosis: {new Date(treatment.nextDose).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      ) : (
+                        <p className="text-xs text-warning-600 font-medium">
+                          Tratamiento pausado - Click en reanudar para continuar
+                        </p>
+                      )}
                     </div>
                   </div>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => markAsTaken(treatment.id)}
-                    className="inline-flex items-center w-full sm:w-auto text-xs lg:text-sm"
-                  >
-                    <CheckCircle size={14} className="mr-1" />
-                    Marcar como Tomado
-                  </Button>
+                  {treatment.status === 'active' ? (
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => markAsTaken(treatment.id)}
+                      className="inline-flex items-center w-full sm:w-auto text-xs lg:text-sm"
+                    >
+                      <CheckCircle size={14} className="mr-1" />
+                      Marcar como Tomado
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => resumeTreatment(treatment.id)}
+                      className="inline-flex items-center w-full sm:w-auto text-xs lg:text-sm"
+                    >
+                      <Play size={14} className="mr-1" />
+                      Reanudar
+                    </Button>
+                  )}
                 </div>
               ))}
           </div>
@@ -196,6 +296,26 @@ const TreatmentsPage = () => {
               {treatment.status === 'active' && (
                 <div className="mt-3 text-xs text-neutral-500">
                   {treatment.takenDoses} de {treatment.totalDoses} dosis tomadas
+                </div>
+              )}
+
+              {treatment.status === 'paused' && (
+                <div className="mt-3">
+                  <div className="text-xs text-neutral-500 mb-2">
+                    {treatment.takenDoses} de {treatment.totalDoses} dosis tomadas
+                  </div>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent opening modal
+                      resumeTreatment(treatment.id);
+                    }}
+                    className="inline-flex items-center w-full text-xs"
+                  >
+                    <Play size={14} className="mr-1" />
+                    Reanudar Tratamiento
+                  </Button>
                 </div>
               )}
             </div>
@@ -303,8 +423,27 @@ const TreatmentsPage = () => {
                         >
                           Marcar Dosis como Tomada
                         </Button>
-                        <Button variant="outline" className="flex-1" size="sm">
+                        <Button
+                          variant="outline"
+                          className="flex-1"
+                          size="sm"
+                          onClick={() => pauseTreatment(treatment.id)}
+                        >
                           Pausar Tratamiento
+                        </Button>
+                      </div>
+                    )}
+
+                    {treatment.status === 'paused' && (
+                      <div className="flex justify-center pt-4">
+                        <Button
+                          variant="primary"
+                          className="inline-flex items-center"
+                          onClick={() => resumeTreatment(treatment.id)}
+                          size="sm"
+                        >
+                          <Play size={14} className="mr-2" />
+                          Reanudar Tratamiento
                         </Button>
                       </div>
                     )}

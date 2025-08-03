@@ -69,3 +69,54 @@
     @apply mb-2 block text-sm font-medium text-neutral-700;
   }
 }
+
+/* FullCalendar custom styles */
+.fc {
+  @apply relative;
+}
+
+.fc .fc-timegrid-now-indicator-line {
+  @apply border-red-500;
+  border-top-width: 2px;
+  z-index: 3;
+  left: 0 !important;
+  right: 0 !important;
+  width: auto !important;
+}
+
+.fc .fc-timegrid-now-indicator-arrow {
+  @apply border-red-500;
+  z-index: 3;
+}
+
+.fc .fc-timegrid-col {
+  @apply relative overflow-hidden;
+}
+
+.fc .fc-timegrid-slots {
+  @apply relative;
+}
+
+.fc .fc-timegrid-slot {
+  @apply border-neutral-200;
+}
+
+.fc .fc-timegrid-axis {
+  @apply border-neutral-200;
+}
+
+.fc .fc-col-header-cell {
+  @apply bg-neutral-50 border-neutral-200;
+}
+
+.fc .fc-daygrid-day {
+  @apply border-neutral-200;
+}
+
+.fc .fc-event {
+  @apply border-primary-500 bg-primary-500;
+}
+
+.fc .fc-event:hover {
+  @apply bg-primary-600 border-primary-600;
+}

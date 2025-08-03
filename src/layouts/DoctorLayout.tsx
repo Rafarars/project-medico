@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { 
-  Users, Calendar, MessageSquare, FileText, Settings, 
-  Menu, X, ChevronRight 
+import {
+  Users, Calendar, MessageSquare, FileText, Settings,
+  Menu, X, ChevronRight, BarChart3
 } from 'lucide-react';
 
 const DoctorLayout = () => {
@@ -72,7 +72,7 @@ const DoctorLayout = () => {
                 className="flex items-center rounded-md px-3 py-3 lg:py-2 text-neutral-700 hover:bg-primary-50 hover:text-primary-600 transition-colors"
                 onClick={() => setSidebarOpen(false)}
               >
-                <Users size={20} className="mr-3 text-neutral-400" />
+                <BarChart3 size={20} className="mr-3 text-neutral-400" />
                 <span className="text-sm lg:text-base">Dashboard</span>
               </Link>
               <Link

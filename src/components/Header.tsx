@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { 
-  Menu, X, Bell, User, LogOut, Calendar, MessageSquare, Settings, 
-  Users, FileText, Heart
+import {
+  Menu, X, Bell, User, LogOut, Settings, Heart
 } from 'lucide-react';
 import Button from './ui/Button';
 
@@ -56,8 +55,8 @@ const Header = () => {
                   </li>
                   {user?.role === 'doctor' && (
                     <li>
-                      <Link to="/doctor/patients" className="text-neutral-700 hover:text-primary-600 transition text-sm xl:text-base">
-                        Pacientes
+                      <Link to="/doctor/treatments" className="text-neutral-700 hover:text-primary-600 transition text-sm xl:text-base">
+                        Tratamientos
                       </Link>
                     </li>
                   )}
@@ -78,17 +77,17 @@ const Header = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/features" className="text-neutral-700 hover:text-primary-600 transition text-sm xl:text-base">
+                    <Link to="/#features" className="text-neutral-700 hover:text-primary-600 transition text-sm xl:text-base">
                       Características
                     </Link>
                   </li>
                   <li>
-                    <Link to="/about" className="text-neutral-700 hover:text-primary-600 transition text-sm xl:text-base">
+                    <Link to="/#about" className="text-neutral-700 hover:text-primary-600 transition text-sm xl:text-base">
                       Acerca de
                     </Link>
                   </li>
                   <li>
-                    <Link to="/contact" className="text-neutral-700 hover:text-primary-600 transition text-sm xl:text-base">
+                    <Link to="/#contact" className="text-neutral-700 hover:text-primary-600 transition text-sm xl:text-base">
                       Contacto
                     </Link>
                   </li>
@@ -101,7 +100,10 @@ const Header = () => {
           <div className="flex items-center space-x-2 sm:space-x-4">
             {isAuthenticated ? (
               <>
-                <button className="relative p-1 sm:p-2 text-neutral-500 hover:text-primary-600 transition">
+                <button
+                  onClick={() => alert('Notificaciones - Funcionalidad en desarrollo')}
+                  className="relative p-1 sm:p-2 text-neutral-500 hover:text-primary-600 transition"
+                >
                   <Bell size={18} className="sm:w-5 sm:h-5" />
                   <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-accent-500"></span>
                 </button>
@@ -125,15 +127,15 @@ const Header = () => {
                   
                   <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                     <div className="py-1">
-                      <Link 
-                        to={user?.role === 'doctor' ? '/doctor/settings' : '/patient/profile'} 
+                      <Link
+                        to={user?.role === 'doctor' ? '/doctor' : '/patient/profile'}
                         className="flex items-center px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 transition"
                       >
                         <User size={16} className="mr-2" />
-                        Perfil
+                        {user?.role === 'doctor' ? 'Dashboard' : 'Perfil'}
                       </Link>
-                      <Link 
-                        to={user?.role === 'doctor' ? '/doctor/settings' : '/patient/settings'} 
+                      <Link
+                        to={user?.role === 'doctor' ? '/doctor/settings' : '/patient/settings'}
                         className="flex items-center px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 transition"
                       >
                         <Settings size={16} className="mr-2" />
@@ -199,12 +201,12 @@ const Header = () => {
                   Citas
                 </Link>
                 {user?.role === 'doctor' && (
-                  <Link 
-                    to="/doctor/patients" 
+                  <Link
+                    to="/doctor/treatments"
                     className="block py-3 text-base font-medium text-neutral-700 hover:text-primary-600 border-b border-neutral-100"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Pacientes
+                    Tratamientos
                   </Link>
                 )}
                 <Link 
@@ -221,12 +223,19 @@ const Header = () => {
                 >
                   Tratamientos
                 </Link>
-                <Link 
-                  to={user?.role === 'doctor' ? '/doctor/settings' : '/patient/profile'} 
+                <Link
+                  to={user?.role === 'doctor' ? '/doctor/settings' : '/patient/profile'}
                   className="block py-3 text-base font-medium text-neutral-700 hover:text-primary-600"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {user?.role === 'doctor' ? 'Configuración' : 'Mi Perfil'}
+                  Mi Perfil
+                </Link>
+                <Link
+                  to={user?.role === 'doctor' ? '/doctor/settings' : '/patient/settings'}
+                  className="block py-3 text-base font-medium text-neutral-700 hover:text-primary-600"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Configuración
                 </Link>
               </>
             ) : (
@@ -238,22 +247,22 @@ const Header = () => {
                 >
                   Inicio
                 </Link>
-                <Link 
-                  to="/features" 
+                <Link
+                  to="/#features"
                   className="block py-3 text-base font-medium text-neutral-700 hover:text-primary-600 border-b border-neutral-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Características
                 </Link>
-                <Link 
-                  to="/about" 
+                <Link
+                  to="/#about"
                   className="block py-3 text-base font-medium text-neutral-700 hover:text-primary-600 border-b border-neutral-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Acerca de
                 </Link>
-                <Link 
-                  to="/contact" 
+                <Link
+                  to="/#contact"
                   className="block py-3 text-base font-medium text-neutral-700 hover:text-primary-600 border-b border-neutral-100"
                   onClick={() => setIsMenuOpen(false)}
                 >

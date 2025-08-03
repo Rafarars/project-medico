@@ -1,10 +1,21 @@
 import { Link } from 'react-router-dom';
 import { Heart, ArrowLeft } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Button from '../components/ui/Button';
 
 const NotFoundPage = () => {
+  const { user, isAuthenticated } = useAuth();
+
+  // Determine the correct home route based on authentication and user role
+  const getHomeRoute = () => {
+    if (!isAuthenticated) {
+      return '/';
+    }
+    return user?.role === 'doctor' ? '/doctor' : '/patient';
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -21,10 +32,10 @@ const NotFoundPage = () => {
               </p>
             </div>
             
-            <Link to="/">
+            <Link to={getHomeRoute()}>
               <Button variant="primary" className="inline-flex items-center">
                 <ArrowLeft size={16} className="mr-2" />
-                Volver al inicio
+                {isAuthenticated ? 'Volver al dashboard' : 'Volver al inicio'}
               </Button>
             </Link>
           </div>

@@ -42,6 +42,18 @@ const AppointmentsPage = () => {
     console.log('Event dropped:', dropInfo);
   };
 
+  // Handle form submission
+  const handleAppointmentSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Here you would normally send the data to your backend
+    console.log('Appointment submitted');
+
+    // Close modal and show success message
+    setIsModalOpen(false);
+    alert('Cita agendada exitosamente');
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between space-y-4 md:flex-row md:items-center md:space-y-0">
@@ -100,7 +112,7 @@ const AppointmentsPage = () => {
           </div>
         </div>
 
-        <div className="h-[600px]">
+        <div className="h-[600px] overflow-hidden">
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView={view}
@@ -120,6 +132,8 @@ const AppointmentsPage = () => {
             slotMinTime="08:00:00"
             slotMaxTime="20:00:00"
             allDaySlot={false}
+            nowIndicator={true}
+            height="100%"
           />
         </div>
       </Card>
@@ -138,7 +152,7 @@ const AppointmentsPage = () => {
               </button>
             </div>
 
-            <form className="space-y-4">
+            <form onSubmit={handleAppointmentSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-neutral-700">
                   Paciente
