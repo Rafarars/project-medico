@@ -1,0 +1,242 @@
+/* Dark Theme Styles */
+.dark {
+  color-scheme: dark;
+}
+
+/* Background colors */
+.dark body {
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+
+.dark .bg-white {
+  background-color: #374151 !important;
+}
+
+.dark .bg-neutral-50 {
+  background-color: #4b5563 !important;
+}
+
+.dark .bg-neutral-100 {
+  background-color: #6b7280 !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: #4b5563 !important;
+}
+
+/* Text colors */
+.dark .text-neutral-900 {
+  color: #f9fafb !important;
+}
+
+.dark .text-neutral-800 {
+  color: #e5e7eb !important;
+}
+
+.dark .text-neutral-700 {
+  color: #d1d5db !important;
+}
+
+.dark .text-neutral-600 {
+  color: #9ca3af !important;
+}
+
+.dark .text-neutral-500 {
+  color: #6b7280 !important;
+}
+
+.dark .text-gray-900 {
+  color: #f9fafb !important;
+}
+
+.dark .text-gray-700 {
+  color: #d1d5db !important;
+}
+
+.dark .text-gray-600 {
+  color: #9ca3af !important;
+}
+
+/* Border colors */
+.dark .border-neutral-200 {
+  border-color: #4b5563 !important;
+}
+
+.dark .border-neutral-300 {
+  border-color: #6b7280 !important;
+}
+
+.dark .border-gray-200 {
+  border-color: #4b5563 !important;
+}
+
+.dark .border-gray-300 {
+  border-color: #6b7280 !important;
+}
+
+/* Form inputs */
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="tel"],
+.dark input[type="password"],
+.dark input[type="number"],
+.dark input[type="time"],
+.dark textarea,
+.dark select {
+  background-color: #374151 !important;
+  border-color: #6b7280 !important;
+  color: #f9fafb !important;
+}
+
+.dark input[type="text"]:focus,
+.dark input[type="email"]:focus,
+.dark input[type="tel"]:focus,
+.dark input[type="password"]:focus,
+.dark input[type="number"]:focus,
+.dark input[type="time"]:focus,
+.dark textarea:focus,
+.dark select:focus {
+  background-color: #374151 !important;
+  border-color: #3b82f6 !important;
+  color: #f9fafb !important;
+}
+
+/* Cards and containers */
+.dark .shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark .shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Hover states */
+.dark .hover\:bg-neutral-50:hover {
+  background-color: #4b5563 !important;
+}
+
+.dark .hover\:bg-gray-50:hover {
+  background-color: #4b5563 !important;
+}
+
+.dark .hover\:text-neutral-700:hover {
+  color: #d1d5db !important;
+}
+
+/* Buttons */
+.dark button {
+  color: inherit;
+}
+
+.dark .bg-primary-600 {
+  background-color: #3b82f6 !important;
+}
+
+.dark .bg-primary-500 {
+  background-color: #3b82f6 !important;
+}
+
+.dark .text-primary-600 {
+  color: #60a5fa !important;
+}
+
+.dark .border-primary-500 {
+  border-color: #3b82f6 !important;
+}
+
+/* Navigation */
+.dark nav {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
+/* Sidebar */
+.dark aside {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
+/* Special backgrounds */
+.dark .bg-red-50 {
+  background-color: #7f1d1d !important;
+}
+
+.dark .bg-red-100 {
+  background-color: #991b1b !important;
+}
+
+.dark .text-red-900 {
+  color: #fca5a5 !important;
+}
+
+.dark .text-red-700 {
+  color: #f87171 !important;
+}
+
+.dark .text-red-600 {
+  color: #ef4444 !important;
+}
+
+.dark .border-red-200 {
+  border-color: #991b1b !important;
+}
+
+.dark .border-red-300 {
+  border-color: #dc2626 !important;
+}
+
+/* Blue backgrounds for icons */
+.dark .bg-blue-100 {
+  background-color: #1e3a8a !important;
+}
+
+.dark .text-blue-600 {
+  color: #60a5fa !important;
+}
+
+/* Primary backgrounds */
+.dark .bg-primary-100 {
+  background-color: #1e3a8a !important;
+}
+
+/* Secondary backgrounds */
+.dark .bg-secondary-100 {
+  background-color: #065f46 !important;
+}
+
+.dark .text-secondary-600 {
+  color: #34d399 !important;
+}
+
+/* Accent backgrounds */
+.dark .bg-accent-100 {
+  background-color: #7c2d12 !important;
+}
+
+.dark .text-accent-600 {
+  color: #fb923c !important;
+}
+
+/* Toggle switches */
+.dark .peer-checked\:bg-primary-600 {
+  background-color: #3b82f6 !important;
+}
+
+/* Placeholders */
+.dark ::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Scrollbars */
+.dark ::-webkit-scrollbar {
+  background-color: #374151;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #6b7280;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af;
+}

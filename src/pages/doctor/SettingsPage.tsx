@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   User, 
   Mail, 
@@ -71,16 +71,36 @@ const SettingsPage = () => {
 
   // System Preferences State
   const [systemPreferences, setSystemPreferences] = useState({
-    language: 'es',
     theme: 'light',
-    timezone: 'America/Mexico_City',
-    dateFormat: 'DD/MM/YYYY',
     timeFormat: '24h'
   });
 
   // UI State
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState('personal');
+
+  // Apply theme to document
+  const applyTheme = (theme: string) => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+
+  // Handle theme change
+  const handleThemeChange = (newTheme: string) => {
+    setSystemPreferences(prev => ({ ...prev, theme: newTheme }));
+    applyTheme(newTheme);
+    localStorage.setItem('gynecare_theme', newTheme);
+  };
+
+  // Load theme on component mount
+  React.useEffect(() => {
+    const savedTheme = localStorage.getItem('gynecare_theme') || 'light';
+    setSystemPreferences(prev => ({ ...prev, theme: savedTheme }));
+    applyTheme(savedTheme);
+  }, []);
 
   // Handlers
   const handlePersonalInfoSubmit = (e: React.FormEvent) => {
@@ -540,7 +560,7 @@ const SettingsPage = () => {
                       type={showPassword ? 'text' : 'password'}
                       value={securityData.currentPassword}
                       onChange={(e) => setSecurityData(prev => ({ ...prev, currentPassword: e.target.value }))}
-                      className="block w-full rounded-md border-neutral-300 text-sm focus:border-primary-500 focus:ring-primary-500 pr-10"
+                      className="block w-full rounded-md border-neutral-300 bg-white text-neutral-900 text-sm focus:border-primary-500 focus:ring-primary-500 pr-10"
                     />
                     <button
                       type="button"
@@ -560,7 +580,7 @@ const SettingsPage = () => {
                     type={showPassword ? 'text' : 'password'}
                     value={securityData.newPassword}
                     onChange={(e) => setSecurityData(prev => ({ ...prev, newPassword: e.target.value }))}
-                    className="block w-full rounded-md border-neutral-300 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    className="block w-full rounded-md border-neutral-300 bg-white text-neutral-900 text-sm focus:border-primary-500 focus:ring-primary-500"
                   />
                 </div>
 
@@ -572,7 +592,7 @@ const SettingsPage = () => {
                     type={showPassword ? 'text' : 'password'}
                     value={securityData.confirmPassword}
                     onChange={(e) => setSecurityData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                    className="block w-full rounded-md border-neutral-300 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    className="block w-full rounded-md border-neutral-300 bg-white text-neutral-900 text-sm focus:border-primary-500 focus:ring-primary-500"
                   />
                 </div>
               </div>
@@ -622,86 +642,40 @@ const SettingsPage = () => {
 
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Language */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-2">
-                  Idioma
-                </label>
-                <select
-                  value={systemPreferences.language}
-                  onChange={(e) => setSystemPreferences(prev => ({ ...prev, language: e.target.value }))}
-                  className="block w-full rounded-md border-neutral-300 text-sm focus:border-primary-500 focus:ring-primary-500"
-                >
-                  <option value="es">Español</option>
-                  <option value="en">English</option>
-                  <option value="fr">Français</option>
-                </select>
-              </div>
-
               {/* Theme */}
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-2">
-                  Tema
+                  Tema de la aplicación
                 </label>
-                <div className="flex space-x-3">
-                  <label className="flex items-center">
+                <div className="flex space-x-4">
+                  <label className="flex items-center cursor-pointer">
                     <input
                       type="radio"
                       name="theme"
                       value="light"
                       checked={systemPreferences.theme === 'light'}
-                      onChange={(e) => setSystemPreferences(prev => ({ ...prev, theme: e.target.value }))}
+                      onChange={(e) => handleThemeChange(e.target.value)}
                       className="text-primary-600 focus:ring-primary-500"
                     />
-                    <Sun size={16} className="ml-2 mr-1" />
+                    <Sun size={16} className="ml-2 mr-1 text-yellow-500" />
                     <span className="text-sm">Claro</span>
                   </label>
-                  <label className="flex items-center">
+                  <label className="flex items-center cursor-pointer">
                     <input
                       type="radio"
                       name="theme"
                       value="dark"
                       checked={systemPreferences.theme === 'dark'}
-                      onChange={(e) => setSystemPreferences(prev => ({ ...prev, theme: e.target.value }))}
+                      onChange={(e) => handleThemeChange(e.target.value)}
                       className="text-primary-600 focus:ring-primary-500"
                     />
-                    <Moon size={16} className="ml-2 mr-1" />
+                    <Moon size={16} className="ml-2 mr-1 text-blue-600" />
                     <span className="text-sm">Oscuro</span>
                   </label>
                 </div>
-              </div>
-
-              {/* Timezone */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-2">
-                  Zona horaria
-                </label>
-                <select
-                  value={systemPreferences.timezone}
-                  onChange={(e) => setSystemPreferences(prev => ({ ...prev, timezone: e.target.value }))}
-                  className="block w-full rounded-md border-neutral-300 text-sm focus:border-primary-500 focus:ring-primary-500"
-                >
-                  <option value="America/Mexico_City">Ciudad de México (GMT-6)</option>
-                  <option value="America/New_York">Nueva York (GMT-5)</option>
-                  <option value="America/Los_Angeles">Los Ángeles (GMT-8)</option>
-                  <option value="Europe/Madrid">Madrid (GMT+1)</option>
-                </select>
-              </div>
-
-              {/* Date Format */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-2">
-                  Formato de fecha
-                </label>
-                <select
-                  value={systemPreferences.dateFormat}
-                  onChange={(e) => setSystemPreferences(prev => ({ ...prev, dateFormat: e.target.value }))}
-                  className="block w-full rounded-md border-neutral-300 text-sm focus:border-primary-500 focus:ring-primary-500"
-                >
-                  <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                  <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                  <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-                </select>
+                <p className="text-xs text-neutral-500 mt-1">
+                  Cambia la apariencia de la interfaz
+                </p>
               </div>
 
               {/* Time Format */}
@@ -709,8 +683,8 @@ const SettingsPage = () => {
                 <label className="block text-sm font-medium text-neutral-700 mb-2">
                   Formato de hora
                 </label>
-                <div className="flex space-x-3">
-                  <label className="flex items-center">
+                <div className="flex space-x-4">
+                  <label className="flex items-center cursor-pointer">
                     <input
                       type="radio"
                       name="timeFormat"
@@ -721,7 +695,7 @@ const SettingsPage = () => {
                     />
                     <span className="ml-2 text-sm">12 horas (AM/PM)</span>
                   </label>
-                  <label className="flex items-center">
+                  <label className="flex items-center cursor-pointer">
                     <input
                       type="radio"
                       name="timeFormat"
@@ -733,32 +707,44 @@ const SettingsPage = () => {
                     <span className="ml-2 text-sm">24 horas</span>
                   </label>
                 </div>
+                <p className="text-xs text-neutral-500 mt-1">
+                  Formato para mostrar las horas en el sistema
+                </p>
               </div>
             </div>
 
-            {/* Data Management */}
+            {/* Account Management */}
             <div className="border-t border-neutral-200 pt-6">
-              <h3 className="text-md font-medium text-neutral-900 mb-4">Gestión de Datos</h3>
-              <div className="space-y-3">
-                <button className="flex items-center justify-between w-full p-3 text-left rounded-md border border-neutral-200 hover:bg-neutral-50">
-                  <div>
-                    <h4 className="text-sm font-medium text-neutral-900">Exportar datos</h4>
-                    <p className="text-xs text-neutral-600">Descarga una copia de toda tu información</p>
+              <h3 className="text-md font-medium text-neutral-900 mb-4">Gestión de Cuenta</h3>
+              <div className="bg-red-50 border border-red-200 rounded-md p-4">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0">
+                    <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
                   </div>
-                  <Button variant="outline" size="sm">
-                    Exportar
-                  </Button>
-                </button>
-
-                <button className="flex items-center justify-between w-full p-3 text-left rounded-md border border-red-200 hover:bg-red-50">
-                  <div>
-                    <h4 className="text-sm font-medium text-red-900">Eliminar cuenta</h4>
-                    <p className="text-xs text-red-600">Elimina permanentemente tu cuenta y todos los datos</p>
+                  <div className="flex-1">
+                    <h4 className="text-sm font-medium text-red-900 mb-1">Eliminar cuenta</h4>
+                    <p className="text-xs text-red-700 mb-3">
+                      Esta acción eliminará permanentemente tu cuenta y todos los datos asociados.
+                      No podrás recuperar esta información una vez eliminada.
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-red-600 border-red-300 hover:bg-red-100"
+                      onClick={() => {
+                        if (window.confirm('¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.')) {
+                          alert('Funcionalidad de eliminación de cuenta pendiente de implementar');
+                        }
+                      }}
+                    >
+                      Eliminar Cuenta
+                    </Button>
                   </div>
-                  <Button variant="outline" size="sm" className="text-red-600 border-red-300 hover:bg-red-50">
-                    Eliminar
-                  </Button>
-                </button>
+                </div>
               </div>
             </div>
 
