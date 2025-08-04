@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface User {
   id: string;
@@ -37,6 +37,29 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+
+  // Load user from localStorage on component mount
+  useEffect(() => {
+    const savedUser = localStorage.getItem('gynecare_user');
+    if (savedUser) {
+      try {
+        const parsedUser = JSON.parse(savedUser);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error('Error parsing saved user:', error);
+        localStorage.removeItem('gynecare_user');
+      }
+    }
+  }, []);
+
+  // Save user to localStorage whenever user state changes
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('gynecare_user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('gynecare_user');
+    }
+  }, [user]);
   
   // Mock login function - in a real app, this would call an API
   const login = async (email: string, password: string, role: 'doctor' | 'patient') => {

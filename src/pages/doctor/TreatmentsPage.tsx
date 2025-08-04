@@ -11,8 +11,19 @@ const TreatmentsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('active');
 
-  // Mock treatments data
-  const treatments = [
+  // Form state for new treatment
+  const [treatmentForm, setTreatmentForm] = useState({
+    patient: '',
+    medication: '',
+    dosage: '',
+    frequency: '',
+    startDate: '',
+    endDate: '',
+    notes: ''
+  });
+
+  // Mock treatments data - now using state to allow updates
+  const [treatments, setTreatments] = useState([
     {
       id: 1,
       patient: 'María García',
@@ -26,19 +37,60 @@ const TreatmentsPage = () => {
       notes: 'Tomar con el desayuno',
     },
     // Add more mock treatments...
-  ];
+  ]);
 
   // Handle form submission
   const handleTreatmentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Here you would normally send the data to your backend
-    console.log('Treatment submitted');
+    // Validate required fields
+    if (!treatmentForm.patient || !treatmentForm.medication || !treatmentForm.dosage || !treatmentForm.frequency) {
+      alert('Por favor completa todos los campos requeridos');
+      return;
+    }
+
+    // Create new treatment object
+    const newTreatment = {
+      id: treatments.length + 1,
+      patient: treatmentForm.patient,
+      medication: treatmentForm.medication,
+      dosage: treatmentForm.dosage,
+      frequency: treatmentForm.frequency,
+      startDate: treatmentForm.startDate || new Date().toISOString().split('T')[0],
+      endDate: treatmentForm.endDate,
+      status: 'active',
+      adherence: 0, // New treatments start with 0% adherence
+      notes: treatmentForm.notes,
+    };
+
+    // Add new treatment to the list
+    setTreatments(prevTreatments => [...prevTreatments, newTreatment]);
+
+    // Reset form
+    setTreatmentForm({
+      patient: '',
+      medication: '',
+      dosage: '',
+      frequency: '',
+      startDate: '',
+      endDate: '',
+      notes: ''
+    });
 
     // Close modal and show success message
     setIsModalOpen(false);
     alert('Tratamiento guardado exitosamente');
+
+    console.log('New treatment added:', newTreatment);
   };
+
+  // Filter treatments based on search term and filter
+  const filteredTreatments = treatments.filter(treatment => {
+    const matchesSearch = treatment.patient.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         treatment.medication.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter = filter === 'all' || treatment.status === filter;
+    return matchesSearch && matchesFilter;
+  });
 
   return (
     <div className="space-y-6">
@@ -117,7 +169,7 @@ const TreatmentsPage = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-200 bg-white">
-              {treatments.map((treatment) => (
+              {filteredTreatments.map((treatment) => (
                 <tr key={treatment.id}>
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="flex items-center">
@@ -204,10 +256,16 @@ const TreatmentsPage = () => {
                 <label className="block text-sm font-medium text-neutral-700">
                   Paciente
                 </label>
-                <select className="mt-1 block w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500">
-                  <option>Seleccionar paciente</option>
-                  <option>María García</option>
-                  <option>Ana López</option>
+                <select
+                  value={treatmentForm.patient}
+                  onChange={(e) => setTreatmentForm({...treatmentForm, patient: e.target.value})}
+                  className="mt-1 block w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
+                >
+                  <option value="">Seleccionar paciente</option>
+                  <option value="María García">María García</option>
+                  <option value="Ana López">Ana López</option>
+                  <option value="Carmen Rodríguez">Carmen Rodríguez</option>
+                  <option value="Isabel Martínez">Isabel Martínez</option>
                 </select>
               </div>
 
@@ -217,6 +275,8 @@ const TreatmentsPage = () => {
                 </label>
                 <input
                   type="text"
+                  value={treatmentForm.medication}
+                  onChange={(e) => setTreatmentForm({...treatmentForm, medication: e.target.value})}
                   className="mt-1 block w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
                   placeholder="Nombre del medicamento"
                 />
@@ -229,6 +289,8 @@ const TreatmentsPage = () => {
                   </label>
                   <input
                     type="text"
+                    value={treatmentForm.dosage}
+                    onChange={(e) => setTreatmentForm({...treatmentForm, dosage: e.target.value})}
                     className="mt-1 block w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
                     placeholder="ej: 5mg"
                   />
@@ -238,11 +300,16 @@ const TreatmentsPage = () => {
                   <label className="block text-sm font-medium text-neutral-700">
                     Frecuencia
                   </label>
-                  <select className="mt-1 block w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500">
-                    <option>Diario</option>
-                    <option>Cada 12 horas</option>
-                    <option>Cada 8 horas</option>
-                    <option>Semanal</option>
+                  <select
+                    value={treatmentForm.frequency}
+                    onChange={(e) => setTreatmentForm({...treatmentForm, frequency: e.target.value})}
+                    className="mt-1 block w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
+                  >
+                    <option value="">Seleccionar frecuencia</option>
+                    <option value="Diario">Diario</option>
+                    <option value="Cada 12 horas">Cada 12 horas</option>
+                    <option value="Cada 8 horas">Cada 8 horas</option>
+                    <option value="Semanal">Semanal</option>
                   </select>
                 </div>
               </div>
@@ -254,6 +321,8 @@ const TreatmentsPage = () => {
                   </label>
                   <input
                     type="date"
+                    value={treatmentForm.startDate}
+                    onChange={(e) => setTreatmentForm({...treatmentForm, startDate: e.target.value})}
                     className="mt-1 block w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
                   />
                 </div>
@@ -264,6 +333,8 @@ const TreatmentsPage = () => {
                   </label>
                   <input
                     type="date"
+                    value={treatmentForm.endDate}
+                    onChange={(e) => setTreatmentForm({...treatmentForm, endDate: e.target.value})}
                     className="mt-1 block w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
                   />
                 </div>
@@ -275,6 +346,8 @@ const TreatmentsPage = () => {
                 </label>
                 <textarea
                   rows={3}
+                  value={treatmentForm.notes}
+                  onChange={(e) => setTreatmentForm({...treatmentForm, notes: e.target.value})}
                   className="mt-1 block w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
                   placeholder="Instrucciones adicionales para el paciente..."
                 />
