@@ -6,6 +6,10 @@
   html {
     @apply font-sans text-neutral-800;
   }
+
+  body {
+    @apply bg-white text-neutral-900 transition-colors duration-300;
+  }
   
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading font-semibold;
@@ -58,7 +62,7 @@
   }
   
   .card {
-    @apply rounded-lg bg-white p-6 shadow-md transition-shadow duration-300 hover:shadow-lg;
+    @apply rounded-lg bg-white p-6 shadow-md transition-all duration-300 hover:shadow-lg;
   }
   
   .input {

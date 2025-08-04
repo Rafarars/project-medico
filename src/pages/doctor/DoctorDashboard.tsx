@@ -105,7 +105,7 @@ const DoctorDashboard = () => {
           <p className="text-neutral-600">Bienvenido de vuelta, aquí está el resumen de tu actividad</p>
         </div>
         <div className="flex space-x-2">
-          <button className="rounded-md bg-white px-3 py-2 text-sm font-medium text-neutral-700 shadow-sm ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50">
+          <button className="rounded-md bg-white px-3 py-2 text-sm font-medium text-neutral-700 shadow-sm ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 transition-colors duration-300">
             Exportar Datos
           </button>
           <button className="rounded-md bg-primary-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700">
@@ -164,7 +164,7 @@ const DoctorDashboard = () => {
           <div className="mb-4 flex items-center justify-between">
             <h2 className="font-heading text-lg font-semibold text-neutral-900">Estadísticas de Pacientes</h2>
             <div className="inline-flex rounded-md shadow-sm">
-              <button className="rounded-l-md bg-white px-3 py-1 text-xs font-medium text-neutral-700 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50">
+              <button className="rounded-l-md bg-white px-3 py-1 text-xs font-medium text-neutral-700 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 transition-colors duration-300">
                 Mensual
               </button>
               <button className="rounded-r-md bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700 ring-1 ring-inset ring-primary-500">
@@ -198,7 +198,7 @@ const DoctorDashboard = () => {
           <div className="mb-4 flex items-center justify-between">
             <h2 className="font-heading text-lg font-semibold text-neutral-900">Tipos de Atención</h2>
             <div className="inline-flex rounded-md shadow-sm">
-              <button className="rounded-l-md bg-white px-3 py-1 text-xs font-medium text-neutral-700 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50">
+              <button className="rounded-l-md bg-white px-3 py-1 text-xs font-medium text-neutral-700 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 transition-colors duration-300">
                 Mensual
               </button>
               <button className="rounded-r-md bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700 ring-1 ring-inset ring-primary-500">
@@ -240,7 +240,7 @@ const DoctorDashboard = () => {
                 className={`rounded-l-md px-3 py-1 text-xs font-medium ${
                   calendarView === 'timeGridDay' 
                     ? 'bg-primary-50 text-primary-700 ring-1 ring-inset ring-primary-500' 
-                    : 'bg-white text-neutral-700 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50'
+                    : 'bg-white text-neutral-700 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 transition-colors duration-300'
                 }`}
               >
                 Día
@@ -250,7 +250,7 @@ const DoctorDashboard = () => {
                 className={`rounded-r-md px-3 py-1 text-xs font-medium ${
                   calendarView === 'dayGridMonth' 
                     ? 'bg-primary-50 text-primary-700 ring-1 ring-inset ring-primary-500' 
-                    : 'bg-white text-neutral-700 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50'
+                    : 'bg-white text-neutral-700 ring-1 ring-inset ring-neutral-300 hover:bg-neutral-50 transition-colors duration-300'
                 }`}
               >
                 Mes
@@ -288,7 +288,7 @@ const DoctorDashboard = () => {
           </div>
           <div className="space-y-4">
             {mockPatients.map((patient) => (
-              <div key={patient.id} className="flex items-center rounded-md border border-neutral-100 bg-white p-3 shadow-sm">
+              <div key={patient.id} className="flex items-center rounded-md border border-neutral-100 bg-white p-3 shadow-sm transition-colors duration-300">
                 <div className="mr-3 h-10 w-10 overflow-hidden rounded-full bg-neutral-200">
                   <div className="flex h-full w-full items-center justify-center bg-primary-100 text-primary-600">
                     <span className="text-lg font-medium">{patient.name.charAt(0)}</span>

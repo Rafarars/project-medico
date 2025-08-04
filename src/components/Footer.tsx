@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-neutral-50 py-8 lg:py-12">
+    <footer className="bg-neutral-50 py-8 lg:py-12 transition-colors duration-300">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}

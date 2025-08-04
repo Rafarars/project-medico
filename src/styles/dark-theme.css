@@ -5,8 +5,12 @@
 
 /* Background colors */
 .dark body {
-  background-color: #1f2937;
-  color: #f9fafb;
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+}
+
+.dark html {
+  background-color: #1f2937 !important;
 }
 
 .dark .bg-white {
@@ -14,15 +18,30 @@
 }
 
 .dark .bg-neutral-50 {
-  background-color: #4b5563 !important;
+  background-color: #374151 !important;
 }
 
 .dark .bg-neutral-100 {
-  background-color: #6b7280 !important;
+  background-color: #4b5563 !important;
 }
 
 .dark .bg-gray-50 {
-  background-color: #4b5563 !important;
+  background-color: #374151 !important;
+}
+
+/* Layout specific backgrounds */
+.dark main {
+  background-color: #1f2937 !important;
+}
+
+.dark aside {
+  background-color: #374151 !important;
+}
+
+/* Card component */
+.dark .card {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
 }
 
 /* Text colors */
@@ -145,6 +164,12 @@
   border-color: #3b82f6 !important;
 }
 
+/* Header */
+.dark header {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
 /* Navigation */
 .dark nav {
   background-color: #374151 !important;
@@ -155,6 +180,11 @@
 .dark aside {
   background-color: #374151 !important;
   border-color: #4b5563 !important;
+}
+
+/* Footer */
+.dark footer {
+  background-color: #374151 !important;
 }
 
 /* Special backgrounds */
@@ -239,4 +269,94 @@
 
 .dark ::-webkit-scrollbar-thumb:hover {
   background-color: #9ca3af;
+}
+
+/* Additional specific overrides */
+.dark div[class*="bg-white"] {
+  background-color: #374151 !important;
+}
+
+.dark div[class*="bg-neutral-50"] {
+  background-color: #374151 !important;
+}
+
+.dark div[class*="bg-gray-50"] {
+  background-color: #374151 !important;
+}
+
+/* Dropdown and modal backgrounds */
+.dark .dropdown-menu,
+.dark .modal,
+.dark .popover {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
+/* Table styles */
+.dark table {
+  background-color: #374151 !important;
+}
+
+.dark th {
+  background-color: #4b5563 !important;
+  color: #f9fafb !important;
+}
+
+.dark td {
+  border-color: #4b5563 !important;
+  color: #e5e7eb !important;
+}
+
+/* Calendar specific styles */
+.dark .fc {
+  background-color: #374151 !important;
+  color: #f9fafb !important;
+}
+
+.dark .fc .fc-col-header-cell {
+  background-color: #4b5563 !important;
+  color: #f9fafb !important;
+}
+
+.dark .fc .fc-daygrid-day {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
+.dark .fc .fc-timegrid-slot {
+  border-color: #4b5563 !important;
+}
+
+.dark .fc .fc-timegrid-axis {
+  border-color: #4b5563 !important;
+  color: #d1d5db !important;
+}
+
+/* Button overrides */
+.dark button[class*="bg-white"] {
+  background-color: #4b5563 !important;
+  color: #f9fafb !important;
+  border-color: #6b7280 !important;
+}
+
+.dark button[class*="bg-white"]:hover {
+  background-color: #6b7280 !important;
+}
+
+/* Specific element overrides */
+.dark div[class*="border-neutral-100"] {
+  border-color: #4b5563 !important;
+}
+
+.dark div[class*="ring-neutral-300"] {
+  --tw-ring-color: #6b7280 !important;
+}
+
+/* Patient card specific */
+.dark .bg-neutral-200 {
+  background-color: #6b7280 !important;
+}
+
+.dark .bg-primary-100 {
+  background-color: #1e3a8a !important;
 }

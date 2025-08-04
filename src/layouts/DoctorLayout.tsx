@@ -31,8 +31,8 @@ const DoctorLayout = () => {
         )}
         
         {/* Sidebar */}
-        <aside 
-          className={`fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-md transition-transform duration-300 lg:relative lg:translate-x-0 lg:w-64 xl:w-72 ${
+        <aside
+          className={`fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-md transition-all duration-300 lg:relative lg:translate-x-0 lg:w-64 xl:w-72 ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
           style={{ top: '56px' }} // Account for header height on mobile
@@ -136,7 +136,7 @@ const DoctorLayout = () => {
         </button>
         
         {/* Main content */}
-        <main className="flex-1 overflow-auto bg-neutral-50 p-3 sm:p-4 lg:p-6">
+        <main className="flex-1 overflow-auto bg-neutral-50 p-3 sm:p-4 lg:p-6 transition-colors duration-300">
           <div className="mx-auto max-w-7xl">
             <Outlet />
           </div>
