@@ -11,8 +11,17 @@ const ReportsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
 
-  // Mock reports data
-  const reports = [
+  // Form state for new report
+  const [reportForm, setReportForm] = useState({
+    patient: '',
+    type: '',
+    startDate: '',
+    endDate: '',
+    notes: ''
+  });
+
+  // Mock reports data - now using state to allow updates
+  const [reports, setReports] = useState([
     {
       id: 1,
       patient: 'María García',
@@ -29,13 +38,104 @@ const ReportsPage = () => {
       doctor: 'Dra. Ana Méndez',
       status: 'pending',
     },
-  ];
+  ]);
 
   const handleGenerateReport = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would generate the report
-    console.log('Generating report:', { selectedPatient, reportType, dateRange });
+
+    // Validate required fields
+    if (!reportForm.patient || !reportForm.type) {
+      alert('Por favor completa todos los campos requeridos');
+      return;
+    }
+
+    // Create new report object
+    const newReport = {
+      id: reports.length + 1,
+      patient: reportForm.patient,
+      type: reportForm.type,
+      date: new Date().toISOString().split('T')[0], // Today's date
+      doctor: 'Dra. Ana Méndez', // Current doctor
+      status: 'completed',
+      dateRange: {
+        start: reportForm.startDate,
+        end: reportForm.endDate
+      },
+      notes: reportForm.notes
+    };
+
+    // Add new report to the list
+    setReports(prevReports => [...prevReports, newReport]);
+
+    // Reset form
+    setReportForm({
+      patient: '',
+      type: '',
+      startDate: '',
+      endDate: '',
+      notes: ''
+    });
+
+    // Close modal and show success message
+    handleModalClose();
+    alert('Informe generado exitosamente');
+
+    console.log('New report generated:', newReport);
+  };
+
+  // Handle report download
+  const handleDownloadReport = (report: any) => {
+    // Create a simple text content for the report
+    const reportContent = `
+INFORME MÉDICO
+==============
+
+Paciente: ${report.patient}
+Tipo de Informe: ${report.type}
+Fecha de Generación: ${report.date}
+Doctor: ${report.doctor}
+Estado: ${report.status === 'completed' ? 'Completado' : 'Pendiente'}
+
+${report.dateRange?.start ? `Período: ${report.dateRange.start} - ${report.dateRange.end}` : ''}
+${report.notes ? `Notas: ${report.notes}` : ''}
+
+---
+Generado por Sistema de Monitoreo Ginecológico
+    `.trim();
+
+    // Create and download the file
+    const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `informe_${report.patient.replace(/\s+/g, '_')}_${report.date}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    console.log('Downloading report:', report);
+  };
+
+  // Filter reports based on search term and filter
+  const filteredReports = reports.filter(report => {
+    const matchesSearch = report.patient.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         report.type.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter = filter === 'all' || report.status === filter;
+    return matchesSearch && matchesFilter;
+  });
+
+  // Handle modal close
+  const handleModalClose = () => {
     setIsModalOpen(false);
+    // Reset form when closing modal
+    setReportForm({
+      patient: '',
+      type: '',
+      startDate: '',
+      endDate: '',
+      notes: ''
+    });
   };
 
   return (
@@ -108,7 +208,7 @@ const ReportsPage = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-200 bg-white">
-              {reports.map((report) => (
+              {filteredReports.map((report) => (
                 <tr key={report.id}>
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="flex items-center">
@@ -143,7 +243,11 @@ const ReportsPage = () => {
                     </span>
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-                    <button className="text-primary-600 hover:text-primary-900">
+                    <button
+                      onClick={() => handleDownloadReport(report)}
+                      className="text-primary-600 hover:text-primary-900"
+                      title="Descargar informe"
+                    >
                       <Download size={16} />
                     </button>
                   </td>
@@ -161,7 +265,7 @@ const ReportsPage = () => {
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-heading text-xl font-semibold">Generar Nuevo Informe</h2>
               <button
-                onClick={() => setIsModalOpen(false)}
+                onClick={handleModalClose}
                 className="rounded-full p-1 text-neutral-500 hover:bg-neutral-100"
               >
                 <FileText size={20} />
@@ -178,13 +282,15 @@ const ReportsPage = () => {
                     <User size={16} />
                   </span>
                   <select
-                    value={selectedPatient}
-                    onChange={(e) => setSelectedPatient(e.target.value)}
+                    value={reportForm.patient}
+                    onChange={(e) => setReportForm({...reportForm, patient: e.target.value})}
                     className="block w-full rounded-r-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
                   >
                     <option value="">Seleccionar paciente</option>
-                    <option value="1">María García</option>
-                    <option value="2">Ana López</option>
+                    <option value="María García">María García</option>
+                    <option value="Ana López">Ana López</option>
+                    <option value="Carmen Rodríguez">Carmen Rodríguez</option>
+                    <option value="Isabel Martínez">Isabel Martínez</option>
                   </select>
                 </div>
               </div>
@@ -194,14 +300,16 @@ const ReportsPage = () => {
                   Tipo de Informe
                 </label>
                 <select
-                  value={reportType}
-                  onChange={(e) => setReportType(e.target.value)}
+                  value={reportForm.type}
+                  onChange={(e) => setReportForm({...reportForm, type: e.target.value})}
                   className="mt-1 block w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
                 >
                   <option value="">Seleccionar tipo</option>
-                  <option value="lab">Resultados de Laboratorio</option>
-                  <option value="evolution">Evolución Mensual</option>
-                  <option value="treatment">Resumen de Tratamiento</option>
+                  <option value="Resultados de Laboratorio">Resultados de Laboratorio</option>
+                  <option value="Evolución Mensual">Evolución Mensual</option>
+                  <option value="Resumen de Tratamiento">Resumen de Tratamiento</option>
+                  <option value="Informe de Consulta">Informe de Consulta</option>
+                  <option value="Historial Clínico">Historial Clínico</option>
                 </select>
               </div>
 
@@ -216,8 +324,8 @@ const ReportsPage = () => {
                     </span>
                     <input
                       type="date"
-                      value={dateRange.start}
-                      onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
+                      value={reportForm.startDate}
+                      onChange={(e) => setReportForm({...reportForm, startDate: e.target.value})}
                       className="block w-full rounded-r-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
                     />
                   </div>
@@ -233,18 +341,31 @@ const ReportsPage = () => {
                     </span>
                     <input
                       type="date"
-                      value={dateRange.end}
-                      onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
+                      value={reportForm.endDate}
+                      onChange={(e) => setReportForm({...reportForm, endDate: e.target.value})}
                       className="block w-full rounded-r-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
                     />
                   </div>
                 </div>
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-neutral-700">
+                  Notas Adicionales
+                </label>
+                <textarea
+                  rows={3}
+                  value={reportForm.notes}
+                  onChange={(e) => setReportForm({...reportForm, notes: e.target.value})}
+                  className="mt-1 block w-full rounded-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
+                  placeholder="Observaciones o notas adicionales para el informe..."
+                />
+              </div>
+
               <div className="flex justify-end space-x-2">
                 <Button
                   variant="outline"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={handleModalClose}
                 >
                   Cancelar
                 </Button>
