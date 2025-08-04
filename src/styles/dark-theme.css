@@ -3,98 +3,98 @@
   color-scheme: dark;
 }
 
-/* Background colors */
+/* Background colors - Elegant Black Theme */
 .dark body {
-  background-color: #1f2937 !important;
-  color: #f9fafb !important;
+  background-color: #0f0f0f !important;
+  color: #ffffff !important;
 }
 
 .dark html {
-  background-color: #1f2937 !important;
+  background-color: #0f0f0f !important;
 }
 
 .dark .bg-white {
-  background-color: #374151 !important;
+  background-color: #1a1a1a !important;
 }
 
 .dark .bg-neutral-50 {
-  background-color: #374151 !important;
+  background-color: #0f0f0f !important;
 }
 
 .dark .bg-neutral-100 {
-  background-color: #4b5563 !important;
+  background-color: #262626 !important;
 }
 
 .dark .bg-gray-50 {
-  background-color: #374151 !important;
+  background-color: #0f0f0f !important;
 }
 
 /* Layout specific backgrounds */
 .dark main {
-  background-color: #1f2937 !important;
+  background-color: #0f0f0f !important;
 }
 
 .dark aside {
-  background-color: #374151 !important;
+  background-color: #1a1a1a !important;
 }
 
 /* Card component */
 .dark .card {
-  background-color: #374151 !important;
-  border-color: #4b5563 !important;
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
 }
 
-/* Text colors */
+/* Text colors - High Contrast */
 .dark .text-neutral-900 {
-  color: #f9fafb !important;
+  color: #ffffff !important;
 }
 
 .dark .text-neutral-800 {
-  color: #e5e7eb !important;
+  color: #f5f5f5 !important;
 }
 
 .dark .text-neutral-700 {
-  color: #d1d5db !important;
+  color: #e5e5e5 !important;
 }
 
 .dark .text-neutral-600 {
-  color: #9ca3af !important;
+  color: #a3a3a3 !important;
 }
 
 .dark .text-neutral-500 {
-  color: #6b7280 !important;
+  color: #737373 !important;
 }
 
 .dark .text-gray-900 {
-  color: #f9fafb !important;
+  color: #ffffff !important;
 }
 
 .dark .text-gray-700 {
-  color: #d1d5db !important;
+  color: #e5e5e5 !important;
 }
 
 .dark .text-gray-600 {
-  color: #9ca3af !important;
+  color: #a3a3a3 !important;
 }
 
-/* Border colors */
+/* Border colors - Subtle but Visible */
 .dark .border-neutral-200 {
-  border-color: #4b5563 !important;
+  border-color: #333333 !important;
 }
 
 .dark .border-neutral-300 {
-  border-color: #6b7280 !important;
+  border-color: #404040 !important;
 }
 
 .dark .border-gray-200 {
-  border-color: #4b5563 !important;
+  border-color: #333333 !important;
 }
 
 .dark .border-gray-300 {
-  border-color: #6b7280 !important;
+  border-color: #404040 !important;
 }
 
-/* Form inputs */
+/* Form inputs - Clean Black Style */
 .dark input[type="text"],
 .dark input[type="email"],
 .dark input[type="tel"],
@@ -103,9 +103,9 @@
 .dark input[type="time"],
 .dark textarea,
 .dark select {
-  background-color: #374151 !important;
-  border-color: #6b7280 !important;
-  color: #f9fafb !important;
+  background-color: #1a1a1a !important;
+  border-color: #404040 !important;
+  color: #ffffff !important;
 }
 
 .dark input[type="text"]:focus,
@@ -116,31 +116,39 @@
 .dark input[type="time"]:focus,
 .dark textarea:focus,
 .dark select:focus {
-  background-color: #374151 !important;
+  background-color: #1a1a1a !important;
   border-color: #3b82f6 !important;
-  color: #f9fafb !important;
+  color: #ffffff !important;
 }
 
-/* Cards and containers */
+/* Cards and containers - Elegant Shadows */
 .dark .shadow-sm {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.8) !important;
 }
 
 .dark .shadow {
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.8), 0 1px 2px 0 rgba(0, 0, 0, 0.6) !important;
 }
 
-/* Hover states */
+.dark .shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.8), 0 2px 4px -1px rgba(0, 0, 0, 0.6) !important;
+}
+
+.dark .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.8), 0 4px 6px -2px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Hover states - Smooth Interactions */
 .dark .hover\:bg-neutral-50:hover {
-  background-color: #4b5563 !important;
+  background-color: #262626 !important;
 }
 
 .dark .hover\:bg-gray-50:hover {
-  background-color: #4b5563 !important;
+  background-color: #262626 !important;
 }
 
 .dark .hover\:text-neutral-700:hover {
-  color: #d1d5db !important;
+  color: #e5e5e5 !important;
 }
 
 /* Buttons */
@@ -164,27 +172,27 @@
   border-color: #3b82f6 !important;
 }
 
-/* Header */
+/* Header - Sleek Black */
 .dark header {
-  background-color: #374151 !important;
-  border-color: #4b5563 !important;
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
 }
 
 /* Navigation */
 .dark nav {
-  background-color: #374151 !important;
-  border-color: #4b5563 !important;
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
 }
 
-/* Sidebar */
+/* Sidebar - Elegant Black */
 .dark aside {
-  background-color: #374151 !important;
-  border-color: #4b5563 !important;
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
 }
 
 /* Footer */
 .dark footer {
-  background-color: #374151 !important;
+  background-color: #1a1a1a !important;
 }
 
 /* Special backgrounds */
@@ -258,30 +266,31 @@
   color: #9ca3af !important;
 }
 
-/* Scrollbars */
+/* Scrollbars - Sleek Black */
 .dark ::-webkit-scrollbar {
-  background-color: #374151;
+  background-color: #1a1a1a;
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background-color: #6b7280;
+  background-color: #404040;
+  border-radius: 4px;
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-  background-color: #9ca3af;
+  background-color: #525252;
 }
 
-/* Additional specific overrides */
+/* Additional specific overrides - Modern Black */
 .dark div[class*="bg-white"] {
-  background-color: #374151 !important;
+  background-color: #1a1a1a !important;
 }
 
 .dark div[class*="bg-neutral-50"] {
-  background-color: #374151 !important;
+  background-color: #0f0f0f !important;
 }
 
 .dark div[class*="bg-gray-50"] {
-  background-color: #374151 !important;
+  background-color: #0f0f0f !important;
 }
 
 /* Dropdown and modal backgrounds */
@@ -292,69 +301,69 @@
   border-color: #4b5563 !important;
 }
 
-/* Table styles */
+/* Table styles - Clean Black */
 .dark table {
-  background-color: #374151 !important;
+  background-color: #1a1a1a !important;
 }
 
 .dark th {
-  background-color: #4b5563 !important;
-  color: #f9fafb !important;
+  background-color: #262626 !important;
+  color: #ffffff !important;
 }
 
 .dark td {
-  border-color: #4b5563 !important;
-  color: #e5e7eb !important;
+  border-color: #333333 !important;
+  color: #e5e5e5 !important;
 }
 
-/* Calendar specific styles */
+/* Calendar specific styles - Modern Black */
 .dark .fc {
-  background-color: #374151 !important;
-  color: #f9fafb !important;
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
 }
 
 .dark .fc .fc-col-header-cell {
-  background-color: #4b5563 !important;
-  color: #f9fafb !important;
+  background-color: #262626 !important;
+  color: #ffffff !important;
 }
 
 .dark .fc .fc-daygrid-day {
-  background-color: #374151 !important;
-  border-color: #4b5563 !important;
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
 }
 
 .dark .fc .fc-timegrid-slot {
-  border-color: #4b5563 !important;
+  border-color: #333333 !important;
 }
 
 .dark .fc .fc-timegrid-axis {
-  border-color: #4b5563 !important;
-  color: #d1d5db !important;
+  border-color: #333333 !important;
+  color: #e5e5e5 !important;
 }
 
-/* Button overrides */
+/* Button overrides - Clean Style */
 .dark button[class*="bg-white"] {
-  background-color: #4b5563 !important;
-  color: #f9fafb !important;
-  border-color: #6b7280 !important;
+  background-color: #262626 !important;
+  color: #ffffff !important;
+  border-color: #404040 !important;
 }
 
 .dark button[class*="bg-white"]:hover {
-  background-color: #6b7280 !important;
+  background-color: #333333 !important;
 }
 
 /* Specific element overrides */
 .dark div[class*="border-neutral-100"] {
-  border-color: #4b5563 !important;
+  border-color: #333333 !important;
 }
 
 .dark div[class*="ring-neutral-300"] {
-  --tw-ring-color: #6b7280 !important;
+  --tw-ring-color: #404040 !important;
 }
 
 /* Patient card specific */
 .dark .bg-neutral-200 {
-  background-color: #6b7280 !important;
+  background-color: #404040 !important;
 }
 
 .dark .bg-primary-100 {
