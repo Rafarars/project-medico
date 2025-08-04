@@ -14,8 +14,17 @@ const AppointmentsPage = () => {
   const [view, setView] = useState<'timeGridWeek' | 'dayGridMonth'>('timeGridWeek');
   const [filter, setFilter] = useState('all');
 
-  // Mock appointments data
-  const appointments = [
+  // Form state for new appointment
+  const [appointmentForm, setAppointmentForm] = useState({
+    patient: '',
+    date: '',
+    time: '',
+    type: 'Presencial', // Default to Presencial
+    notes: ''
+  });
+
+  // Mock appointments data - now using state to allow updates
+  const [appointments, setAppointments] = useState([
     {
       id: 1,
       title: 'María García - Control Prenatal',
@@ -30,10 +39,16 @@ const AppointmentsPage = () => {
       }
     },
     // Add more mock appointments...
-  ];
+  ]);
 
   const handleDateSelect = (selectInfo: any) => {
     setSelectedDate(selectInfo.start);
+    // Pre-fill the date in the form
+    const selectedDateStr = selectInfo.start.toISOString().split('T')[0];
+    setAppointmentForm(prev => ({
+      ...prev,
+      date: selectedDateStr
+    }));
     setIsModalOpen(true);
   };
 
@@ -46,12 +61,66 @@ const AppointmentsPage = () => {
   const handleAppointmentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Here you would normally send the data to your backend
-    console.log('Appointment submitted');
+    // Validate required fields
+    if (!appointmentForm.patient || !appointmentForm.date || !appointmentForm.time) {
+      alert('Por favor completa todos los campos requeridos');
+      return;
+    }
+
+    // Create new appointment object
+    const newAppointment = {
+      id: appointments.length + 1,
+      title: `${appointmentForm.patient} - Consulta ${appointmentForm.type}`,
+      start: `${appointmentForm.date}T${appointmentForm.time}:00`,
+      end: `${appointmentForm.date}T${addOneHour(appointmentForm.time)}:00`,
+      status: 'confirmed',
+      type: appointmentForm.type,
+      patient: {
+        name: appointmentForm.patient,
+        phone: '+1234567890', // Mock data
+        email: 'patient@example.com' // Mock data
+      },
+      notes: appointmentForm.notes
+    };
+
+    // Add new appointment to the list
+    setAppointments(prevAppointments => [...prevAppointments, newAppointment]);
+
+    // Reset form
+    setAppointmentForm({
+      patient: '',
+      date: '',
+      time: '',
+      type: 'Presencial',
+      notes: ''
+    });
 
     // Close modal and show success message
-    setIsModalOpen(false);
+    handleModalClose();
     alert('Cita agendada exitosamente');
+
+    console.log('New appointment added:', newAppointment);
+  };
+
+  // Helper function to add one hour to time
+  const addOneHour = (time: string) => {
+    const [hours, minutes] = time.split(':').map(Number);
+    const newHours = (hours + 1) % 24;
+    return `${newHours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  };
+
+  // Handle modal close
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    // Reset form when closing modal
+    setAppointmentForm({
+      patient: '',
+      date: '',
+      time: '',
+      type: 'Presencial',
+      notes: ''
+    });
+    setSelectedDate(null);
   };
 
   return (
@@ -145,7 +214,7 @@ const AppointmentsPage = () => {
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-heading text-xl font-semibold">Nueva Cita</h2>
               <button
-                onClick={() => setIsModalOpen(false)}
+                onClick={handleModalClose}
                 className="rounded-full p-1 text-neutral-500 hover:bg-neutral-100"
               >
                 <X size={20} />
@@ -161,11 +230,16 @@ const AppointmentsPage = () => {
                   <span className="inline-flex items-center rounded-l-md border border-r-0 border-neutral-300 bg-neutral-50 px-3 text-neutral-500">
                     <User size={16} />
                   </span>
-                  <select className="block w-full rounded-r-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500">
-                    <option>Seleccionar paciente</option>
-                    <option>María García</option>
-                    <option>Ana López</option>
-                    {/* Add more patients */}
+                  <select
+                    value={appointmentForm.patient}
+                    onChange={(e) => setAppointmentForm({...appointmentForm, patient: e.target.value})}
+                    className="block w-full rounded-r-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
+                  >
+                    <option value="">Seleccionar paciente</option>
+                    <option value="María García">María García</option>
+                    <option value="Ana López">Ana López</option>
+                    <option value="Carmen Rodríguez">Carmen Rodríguez</option>
+                    <option value="Isabel Martínez">Isabel Martínez</option>
                   </select>
                 </div>
               </div>
@@ -181,9 +255,12 @@ const AppointmentsPage = () => {
                     </span>
                     <input
                       type="date"
+                      value={appointmentForm.date}
+                      onChange={(e) => {
+                        setAppointmentForm({...appointmentForm, date: e.target.value});
+                        setSelectedDate(new Date(e.target.value));
+                      }}
                       className="block w-full rounded-r-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
-                      value={selectedDate ? format(selectedDate, 'yyyy-MM-dd') : ''}
-                      onChange={(e) => setSelectedDate(new Date(e.target.value))}
                     />
                   </div>
                 </div>
@@ -198,6 +275,8 @@ const AppointmentsPage = () => {
                     </span>
                     <input
                       type="time"
+                      value={appointmentForm.time}
+                      onChange={(e) => setAppointmentForm({...appointmentForm, time: e.target.value})}
                       className="block w-full rounded-r-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
                     />
                   </div>
@@ -211,14 +290,24 @@ const AppointmentsPage = () => {
                 <div className="mt-1 grid grid-cols-2 gap-2">
                   <button
                     type="button"
-                    className="flex items-center justify-center rounded-md border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                    onClick={() => setAppointmentForm({...appointmentForm, type: 'Presencial'})}
+                    className={`flex items-center justify-center rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
+                      appointmentForm.type === 'Presencial'
+                        ? 'border-primary-500 bg-primary-50 text-primary-700'
+                        : 'border-neutral-300 text-neutral-700 hover:bg-neutral-50'
+                    }`}
                   >
                     <User size={16} className="mr-2" />
                     Presencial
                   </button>
                   <button
                     type="button"
-                    className="flex items-center justify-center rounded-md border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                    onClick={() => setAppointmentForm({...appointmentForm, type: 'Virtual'})}
+                    className={`flex items-center justify-center rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
+                      appointmentForm.type === 'Virtual'
+                        ? 'border-primary-500 bg-primary-50 text-primary-700'
+                        : 'border-neutral-300 text-neutral-700 hover:bg-neutral-50'
+                    }`}
                   >
                     <Video size={16} className="mr-2" />
                     Virtual
@@ -236,6 +325,8 @@ const AppointmentsPage = () => {
                   </span>
                   <textarea
                     rows={3}
+                    value={appointmentForm.notes}
+                    onChange={(e) => setAppointmentForm({...appointmentForm, notes: e.target.value})}
                     className="block w-full rounded-r-md border-neutral-300 focus:border-primary-500 focus:ring-primary-500"
                     placeholder="Agregar notas sobre la consulta..."
                   />
@@ -245,7 +336,7 @@ const AppointmentsPage = () => {
               <div className="flex justify-end space-x-2">
                 <Button
                   variant="outline"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={handleModalClose}
                 >
                   Cancelar
                 </Button>
