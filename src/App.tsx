@@ -11,6 +11,7 @@ import AppointmentsPage from './pages/doctor/AppointmentsPage';
 import TreatmentsPage from './pages/doctor/TreatmentsPage';
 import MessagesPage from './pages/doctor/MessagesPage';
 import ReportsPage from './pages/doctor/ReportsPage';
+import DoctorSettingsPage from './pages/doctor/SettingsPage';
 import PatientDashboard from './pages/patient/PatientDashboard';
 import PatientAppointmentsPage from './pages/patient/AppointmentsPage';
 import PatientTreatmentsPage from './pages/patient/TreatmentsPage';
@@ -58,7 +59,7 @@ function App() {
         <Route path="treatments" element={<TreatmentsPage />} />
         <Route path="messages" element={<MessagesPage />} />
         <Route path="reports" element={<ReportsPage />} />
-        <Route path="settings" element={<div className="p-6"><h1 className="text-2xl font-bold mb-4">Configuración del Doctor</h1><p className="text-neutral-600">Página de configuración en desarrollo.</p></div>} />
+        <Route path="settings" element={<DoctorSettingsPage />} />
       </Route>
       
       {/* Patient routes */}
