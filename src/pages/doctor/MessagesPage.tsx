@@ -6,6 +6,7 @@ const MessagesPage = () => {
   const [selectedChat, setSelectedChat] = useState<number | null>(1);
   const [message, setMessage] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [messagesData, setMessagesData] = useState<{[key: number]: any[]}>({});
 
   // Mock conversations data
   const conversations = [
@@ -35,34 +36,141 @@ const MessagesPage = () => {
         unread: false,
       },
     },
+    {
+      id: 3,
+      patient: {
+        name: 'Carmen Rodríguez',
+        image: null,
+        lastSeen: '2024-03-19T08:45:00',
+      },
+      lastMessage: {
+        text: 'Buenos días, doctora',
+        timestamp: '2024-03-19T08:45:00',
+        unread: true,
+      },
+    },
   ];
 
-  // Mock messages for the selected conversation
-  const messages = [
-    {
-      id: 1,
-      sender: 'patient',
-      text: 'Doctora, tengo una pregunta sobre el tratamiento',
-      timestamp: '2024-03-19T10:30:00',
-      status: 'read',
-    },
-    {
-      id: 2,
-      sender: 'doctor',
-      text: 'Claro, dime en qué puedo ayudarte',
-      timestamp: '2024-03-19T10:31:00',
-      status: 'read',
-    },
-  ];
+  // Mock messages organized by conversation ID
+  const allMessages = {
+    1: [
+      {
+        id: 1,
+        sender: 'patient',
+        text: 'Doctora, tengo una pregunta sobre el tratamiento',
+        timestamp: '2024-03-19T10:30:00',
+        status: 'read',
+      },
+      {
+        id: 2,
+        sender: 'doctor',
+        text: 'Claro, dime en qué puedo ayudarte',
+        timestamp: '2024-03-19T10:31:00',
+        status: 'read',
+      },
+      {
+        id: 3,
+        sender: 'patient',
+        text: 'Quería saber si puedo tomar el medicamento con comida',
+        timestamp: '2024-03-19T10:32:00',
+        status: 'read',
+      },
+      {
+        id: 4,
+        sender: 'doctor',
+        text: 'Sí, es recomendable tomarlo con alimentos para evitar molestias estomacales',
+        timestamp: '2024-03-19T10:33:00',
+        status: 'read',
+      },
+    ],
+    2: [
+      {
+        id: 5,
+        sender: 'patient',
+        text: 'Gracias por la consulta de hoy',
+        timestamp: '2024-03-19T09:15:00',
+        status: 'read',
+      },
+      {
+        id: 6,
+        sender: 'doctor',
+        text: 'De nada, Ana. Recuerda seguir las indicaciones que te di',
+        timestamp: '2024-03-19T09:16:00',
+        status: 'read',
+      },
+      {
+        id: 7,
+        sender: 'patient',
+        text: 'Perfecto, doctora. ¿Cuándo debo volver para el control?',
+        timestamp: '2024-03-19T09:17:00',
+        status: 'read',
+      },
+      {
+        id: 8,
+        sender: 'doctor',
+        text: 'En dos semanas. Te enviaré un recordatorio',
+        timestamp: '2024-03-19T09:18:00',
+        status: 'delivered',
+      },
+    ],
+    3: [
+      {
+        id: 9,
+        sender: 'patient',
+        text: 'Buenos días, doctora',
+        timestamp: '2024-03-19T08:45:00',
+        status: 'read',
+      },
+      {
+        id: 10,
+        sender: 'doctor',
+        text: 'Buenos días, Carmen. ¿Cómo te sientes hoy?',
+        timestamp: '2024-03-19T08:46:00',
+        status: 'read',
+      },
+      {
+        id: 11,
+        sender: 'patient',
+        text: 'Mucho mejor, gracias. Los síntomas han disminuido',
+        timestamp: '2024-03-19T08:47:00',
+        status: 'read',
+      },
+    ],
+  };
+
+  // Get messages for the selected conversation (merge initial data with dynamic data)
+  const messages = selectedChat ? [
+    ...(allMessages[selectedChat] || []),
+    ...(messagesData[selectedChat] || [])
+  ] : [];
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim()) return;
-    
-    // Here you would normally send the message to your backend
+    if (!message.trim() || !selectedChat) return;
+
+    // Create new message
+    const newMessage = {
+      id: Date.now(), // Simple ID generation
+      sender: 'doctor',
+      text: message.trim(),
+      timestamp: new Date().toISOString(),
+      status: 'sent',
+    };
+
+    // Add message to the selected conversation
+    setMessagesData(prev => ({
+      ...prev,
+      [selectedChat]: [...(prev[selectedChat] || []), newMessage]
+    }));
+
     console.log('Sending message:', message);
     setMessage('');
   };
+
+  // Filter conversations based on search term
+  const filteredConversations = conversations.filter(conversation =>
+    conversation.patient.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="h-[calc(100vh-12rem)]">
@@ -84,7 +192,7 @@ const MessagesPage = () => {
             </div>
 
             <div className="flex-1 overflow-y-auto">
-              {conversations.map((conversation) => (
+              {filteredConversations.map((conversation) => (
                 <button
                   key={conversation.id}
                   onClick={() => setSelectedChat(conversation.id)}
@@ -136,11 +244,13 @@ const MessagesPage = () => {
                 <div className="flex items-center">
                   <div className="mr-3 h-10 w-10">
                     <div className="flex h-full w-full items-center justify-center rounded-full bg-primary-100 text-primary-600">
-                      M
+                      {conversations.find(c => c.id === selectedChat)?.patient.name.charAt(0) || 'P'}
                     </div>
                   </div>
                   <div>
-                    <h2 className="font-medium text-neutral-900">María García</h2>
+                    <h2 className="font-medium text-neutral-900">
+                      {conversations.find(c => c.id === selectedChat)?.patient.name || 'Paciente'}
+                    </h2>
                     <p className="text-sm text-neutral-500">En línea</p>
                   </div>
                 </div>
