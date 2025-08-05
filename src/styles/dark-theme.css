@@ -18,7 +18,7 @@
 }
 
 .dark .bg-neutral-50 {
-  background-color: #0f0f0f !important;
+  background-color: #262626 !important;
 }
 
 .dark .bg-neutral-100 {
@@ -103,8 +103,8 @@
 .dark input[type="time"],
 .dark textarea,
 .dark select {
-  background-color: #1a1a1a !important;
-  border-color: #404040 !important;
+  background-color: #262626 !important;
+  border-color: #525252 !important;
   color: #ffffff !important;
 }
 

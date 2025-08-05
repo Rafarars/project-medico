@@ -270,7 +270,7 @@ const DoctorDashboard = () => {
               height="100%"
               eventColor="#1A73E8"
               eventBorderColor="#1559B7"
-              nowIndicator={true}
+              nowIndicator={false}
               dayMaxEvents={true}
               selectable={true}
               selectMirror={true}

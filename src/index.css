@@ -66,7 +66,7 @@
   }
   
   .input {
-    @apply w-full rounded-md border border-neutral-300 px-4 py-2 transition duration-200 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100;
+    @apply w-full rounded-md border border-neutral-300 bg-neutral-50 px-4 py-2 transition duration-200 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100 focus:bg-white;
   }
   
   .label {
@@ -77,20 +77,20 @@
 /* FullCalendar custom styles */
 .fc {
   @apply relative;
+  overflow: hidden;
 }
 
 .fc .fc-timegrid-now-indicator-line {
   @apply border-red-500;
   border-top-width: 2px;
-  z-index: 3;
-  left: 0 !important;
-  right: 0 !important;
-  width: auto !important;
+  z-index: 1;
+  position: relative;
 }
 
 .fc .fc-timegrid-now-indicator-arrow {
   @apply border-red-500;
-  z-index: 3;
+  z-index: 1;
+  position: relative;
 }
 
 .fc .fc-timegrid-col {
@@ -99,6 +99,29 @@
 
 .fc .fc-timegrid-slots {
   @apply relative;
+}
+
+/* Ensure now indicator stays within calendar bounds */
+.fc .fc-timegrid-now-indicator-line {
+  max-width: 100%;
+  overflow: hidden;
+  left: 0 !important;
+  right: auto !important;
+  width: 100% !important;
+}
+
+.fc .fc-view-harness {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Additional containment for calendar */
+.fc .fc-view {
+  overflow: hidden;
+}
+
+.fc .fc-timegrid {
+  overflow: hidden;
 }
 
 .fc .fc-timegrid-slot {

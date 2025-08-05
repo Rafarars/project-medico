@@ -560,7 +560,7 @@ const SettingsPage = () => {
                       type={showPassword ? 'text' : 'password'}
                       value={securityData.currentPassword}
                       onChange={(e) => setSecurityData(prev => ({ ...prev, currentPassword: e.target.value }))}
-                      className="block w-full rounded-md border-neutral-300 bg-white text-neutral-900 text-sm focus:border-primary-500 focus:ring-primary-500 pr-10"
+                      className="block w-full rounded-md border-neutral-300 bg-neutral-50 text-neutral-900 text-sm focus:border-primary-500 focus:ring-primary-500 focus:bg-white pr-10"
                     />
                     <button
                       type="button"
@@ -580,7 +580,7 @@ const SettingsPage = () => {
                     type={showPassword ? 'text' : 'password'}
                     value={securityData.newPassword}
                     onChange={(e) => setSecurityData(prev => ({ ...prev, newPassword: e.target.value }))}
-                    className="block w-full rounded-md border-neutral-300 bg-white text-neutral-900 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    className="block w-full rounded-md border-neutral-300 bg-neutral-50 text-neutral-900 text-sm focus:border-primary-500 focus:ring-primary-500 focus:bg-white"
                   />
                 </div>
 
@@ -592,7 +592,7 @@ const SettingsPage = () => {
                     type={showPassword ? 'text' : 'password'}
                     value={securityData.confirmPassword}
                     onChange={(e) => setSecurityData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                    className="block w-full rounded-md border-neutral-300 bg-white text-neutral-900 text-sm focus:border-primary-500 focus:ring-primary-500"
+                    className="block w-full rounded-md border-neutral-300 bg-neutral-50 text-neutral-900 text-sm focus:border-primary-500 focus:ring-primary-500 focus:bg-white"
                   />
                 </div>
               </div>
